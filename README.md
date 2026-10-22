@@ -61,8 +61,8 @@ Available commands depend on the current implementation in `jarvis.py`.
 Clone the Windows version of the repository:
 
 ```powershell
-git clone -b windows-support https://github.com/KTT-atest/Jarvis-Assistant.git
-cd Jarvis-Assistant
+git clone https://github.com/KTT-atest/Jarvis-Assistant-Windows-Fork.git
+cd Jarvis-Assistant-Windows-Fork
 ```
 
 ### 2. Install Python
