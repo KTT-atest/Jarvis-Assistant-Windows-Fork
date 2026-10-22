@@ -1,0 +1,20 @@
+# Voice models (too large for GitHub)
+*.onnx
+*.onnx.json
+*.zip
+
+# Vosk models
+vosk-model*/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Temp audio files
+*.wav
+/tmp/
+
+# Environment files
+.env
+*.key
