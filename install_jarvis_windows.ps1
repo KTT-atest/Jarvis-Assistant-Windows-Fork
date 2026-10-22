@@ -11,12 +11,12 @@ $VoskDir = Join-Path $ModelsDir "vosk"
 $VoskModelName = "vosk-model-small-en-us-0.15"
 $VoskModelDir = Join-Path $VoskDir $VoskModelName
 
-$PiperModelName = "jarvis-medium.onnx"
+$PiperModelName = "jarvis-high.onnx"
 $PiperModelPath = Join-Path $PiperDir $PiperModelName
 $PiperConfigPath = "$PiperModelPath.json"
 
-$PiperModelUrl = "https://huggingface.co/jgkawell/jarvis/resolve/main/en/en_GB/jarvis/medium/jarvis-medium.onnx"
-$PiperConfigUrl = "https://huggingface.co/jgkawell/jarvis/resolve/main/en/en_GB/jarvis/medium/jarvis-medium.onnx.json"
+$PiperModelUrl = "https://huggingface.co/jgkawell/jarvis/resolve/main/en/en_GB/jarvis/high/jarvis-high.onnx"
+$PiperConfigUrl = "https://huggingface.co/jgkawell/jarvis/resolve/main/en/en_GB/jarvis/high/jarvis-high.onnx.json"
 
 $VoskZipPath = Join-Path $ModelsDir "$VoskModelName.zip"
 $VoskUrl = "https://alphacephei.com/vosk/models/$VoskModelName.zip"
