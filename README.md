@@ -1,5 +1,3 @@
-# JARVIS Assistant
-
 <div align="center">
 
 ```text
