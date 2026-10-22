@@ -77,7 +77,7 @@ Open PowerShell in the project folder:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
-.\install_jarvis_windows.ps1
+.\install.ps1
 ```
 
 The installer will:
@@ -227,7 +227,7 @@ This allows you to use a different Vosk model directory if needed.
 ```text
 Jarvis-Assistant/
 ├── jarvis.py
-├── install_jarvis_windows.ps1
+├── 
 └── README.md
 ```
 
