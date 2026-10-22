@@ -20,6 +20,8 @@
 
 ---
 
+##DISCLAMER : All current Windows versions are in beta, use at your own mental health
+
 ## What is this?
 
 JARVIS is a voice-controlled assistant for Windows, inspired by the AI from Iron Man.
