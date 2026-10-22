@@ -62,7 +62,7 @@ Clone the Windows version of the repository:
 
 ```powershell
 git clone https://github.com/KTT-atest/Jarvis-Assistant-Windows-Fork.git
-cd Jarvis-Assistant-Windows-Fork
+cd Jarvis-Assistant-Windows-Fork-Windows-Fork
 ```
 
 ### 2. Install Python
@@ -144,7 +144,7 @@ The model location can be overridden using the `VOSK_MODEL_PATH` environment var
 The configured Gemini model defaults to:
 
 ```text
-gemini-2.5-flash
+gemini-3.5-flash-lite
 ```
 
 The model can be overridden using the `GEMINI_MODEL` environment variable, provided the selected model is available to your API key.
@@ -202,7 +202,7 @@ The assistant reads its API key and model from environment variables:
 
 ```python
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 ```
 
 Do not hardcode your API key in the source code.
