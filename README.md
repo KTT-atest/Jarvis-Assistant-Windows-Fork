@@ -65,8 +65,6 @@ git clone -b windows-support https://github.com/KTT-atest/Jarvis-Assistant.git
 cd Jarvis-Assistant
 ```
 
-Alternatively, download the ZIP of the `windows-support` branch from GitHub and extract it.
-
 ### 2. Install Python
 
 Install Python 3.10 or newer from [python.org](https://www.python.org/downloads/).
