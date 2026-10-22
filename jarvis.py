@@ -24,11 +24,9 @@ PIPER_MODEL = Path(os.environ.get(
     str(Path.home() / "piper-voices" / "jarvis-high.onnx")
 ))
 
-# Check if piper is available
+PIPER_EXE = "piper.exe" if os.name == "nt" else "piper"
 PIPER_AVAILABLE = subprocess.run(
-    ["piper", "--help"], capture_output=True
-).returncode == 0 if os.name != 'nt' else subprocess.run(
-    ["piper.exe", "--help"], capture_output=True
+    [PIPER_EXE, "--help"], capture_output=True
 ).returncode == 0
 
 model = Model(str(VOSK_MODEL_PATH))
@@ -45,8 +43,6 @@ COMMANDS = {
     "sleep":         "rundll32.exe powrprof.dll,SetSuspendState 0,1,0",
     "lock":          "rundll32.exe user32.dll,LockWorkStation",
     "lock screen":   "rundll32.exe user32.dll,LockWorkStation",
-    "volume up":     "powershell -c \"$vol = [Math]::Min(100, (Get-AudioDevice -PlaybackVolume) + 10); Set-AudioDevice -PlaybackVolume $vol\"",
-    "volume down":   "powershell -c \"$vol = [Math]::Max(0, (Get-AudioDevice -PlaybackVolume) - 10); Set-AudioDevice -PlaybackVolume $vol\"",
     "open browser":  "start https://google.com",
     "open terminal": "start cmd",
     "open gmail":    "start https://mail.google.com",
@@ -77,8 +73,8 @@ Action types:
 - "run_and_speak": run command and speak its output
 
 Examples:
-"check system health" -> {"action":"run_and_speak","value":"powershell -c \"Get-WmiObject Win32_Processor | Select LoadPercentage | Format-List\"","speech":"Running diagnostics, sir."}
-"what time is it" -> {"action":"run_and_speak","value":"powershell -c \"Get-Date -Format 'HH:mm'\"","speech":"Checking the time, sir."}
+"check system health" -> {"action":"run_and_speak","value":"powershell -c \"Get-WmiObject Win32_Processor | Select-Object LoadPercentage | Format-List\"","speech":"Running diagnostics, sir."}
+"what time is it" -> {"action":"run_and_speak","value":"powershell -c \"Get-Date -Format HH:mm\"","speech":"Checking the time, sir."}
 "open youtube" -> {"action":"open_url","value":"https://youtube.com","speech":"Opening YouTube, sir."}
 "capital of france" -> {"action":"speak","value":"","speech":"Paris, sir."}"""
 
@@ -89,10 +85,10 @@ def get_system_context():
             'powershell -c "(Get-WmiObject Win32_Processor).LoadPercentage"',
             shell=True).decode().strip()
         ram  = subprocess.check_output(
-            'powershell -c "$os = Get-WmiObject Win32_OperatingSystem; [math]::Round(($os.TotalVisibleMemorySize - $os.FreePhysicalMemory)/1MB, 1)"',
+            'powershell -c "$os=Get-WmiObject Win32_OperatingSystem;[math]::Round(($os.TotalVisibleMemorySize-$os.FreePhysicalMemory)/1MB,1)"',
             shell=True).decode().strip()
         disk = subprocess.check_output(
-            'powershell -c "Get-PSDrive C | Select-Object @{N=\'Free\';E={[math]::Round($_.Free/1GB,1)}} | Format-List"',
+            'powershell -c "Get-PSDrive C|Select @{N=\'Free\';E={[math]::Round($_.Free/1GB,1)}}|Format-List"',
             shell=True).decode().strip()
         batt = subprocess.check_output(
             'powershell -c "(Get-WmiObject Win32_Battery).EstimatedChargeRemaining"',
@@ -100,6 +96,21 @@ def get_system_context():
         return f"CPU: {cpu}% | RAM used: {ram}GB | Disk: {disk} | Battery: {batt}%"
     except Exception as e:
         return f"System context unavailable: {e}"
+
+
+def _speak_pyttsx3(text):
+    try:
+        import pyttsx3
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 150)
+        for v in engine.getProperty('voices'):
+            if 'male' in v.name.lower() or 'david' in v.name.lower():
+                engine.setProperty('voice', v.id)
+                break
+        engine.say(text)
+        engine.runAndWait()
+    except Exception as e:
+        print(f"pyttsx3 error: {e}")
 
 
 def speak(text):
@@ -112,9 +123,8 @@ def speak(text):
     if PIPER_AVAILABLE and PIPER_MODEL.exists():
         try:
             tmp = Path(os.environ.get("TEMP", "C:/Temp")) / "jarvis_tts.wav"
-            piper_exe = "piper.exe" if os.name == 'nt' else "piper"
             subprocess.run(
-                f'echo {clean} | {piper_exe} --model "{PIPER_MODEL}" --output_file "{tmp}"',
+                f'echo {clean} | {PIPER_EXE} --model "{PIPER_MODEL}" --output_file "{tmp}"',
                 shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
             )
             subprocess.run(
@@ -129,23 +139,6 @@ def speak(text):
 
     q.queue.clear()
     is_speaking = False
-
-
-def _speak_pyttsx3(text):
-    try:
-        import pyttsx3
-        engine = pyttsx3.init()
-        engine.setProperty('rate', 150)
-        voices = engine.getProperty('voices')
-        # Try to find a British male voice
-        for v in voices:
-            if 'male' in v.name.lower() or 'david' in v.name.lower():
-                engine.setProperty('voice', v.id)
-                break
-        engine.say(text)
-        engine.runAndWait()
-    except Exception as e:
-        print(f"pyttsx3 error: {e}")
 
 
 def ask_gemini(prompt):
