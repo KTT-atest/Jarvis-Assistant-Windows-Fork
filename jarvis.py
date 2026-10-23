@@ -24,7 +24,7 @@ PIPER_MODEL = Path(os.environ.get(
     str(Path.home() / "piper-voices" / "jarvis-high.onnx")
 ))
 
-PIPER_EXE = "piper.exe" if os.name == "nt" else "piper"
+PIPER_EXE = str(Path(__file__).parent / ".venv" / "Scripts" / "piper.exe") if os.name == "nt" else "piper"
 PIPER_AVAILABLE = subprocess.run(
     [PIPER_EXE, "--help"], capture_output=True
 ).returncode == 0
